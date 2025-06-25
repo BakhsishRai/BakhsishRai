@@ -1,0 +1,55 @@
+<#
+.SYNOPSIS
+    This PowerShell script ensures that Windows 10 systems must use a BitLocker PIN for pre-boot authentication.
+
+.NOTES
+    Author          : Bakhsish Rai
+    LinkedIn        : linkedin.com/in/bakhsish-rai-233621267/
+    GitHub          : github.com/BakhsishRai
+    Date Created    : 06-25-2025
+    Last Modified   : 06-25-2025
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-00-000031
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\(STIG-ID-WN10-00-000031.).ps1 
+#>
+
+# Define the registry path
+$regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application"
+
+# Create the registry key if it doesn't exist
+if (-not (Test-Path $regPath)) {
+    New-Item -Path $regPath -Force | Out-Null
+}
+
+# Set the MaxSize value to 0x8000 (32,768 bytes)
+New-ItemProperty -Path $regPath -Name "MaxSize" -PropertyType DWord -Value 0x8000 -Force | Out-Null
+
+Write-Host "Registry setting applied: $regPath\MaxSize = 0x8000"# Create registry path if it doesn't exist
+$regPath = "HKLM:\SOFTWARE\Policies\Microsoft\FVE"
+New-Item -Path $regPath -Force | Out-Null
+
+# Enable policy: Require additional authentication at startup
+Set-ItemProperty -Path $regPath -Name "UseAdvancedStartup" -Value 1 -Type DWord
+
+# Configure TPM startup PIN to be required
+Set-ItemProperty -Path $regPath -Name "UseTPMPIN" -Value 2 -Type DWord
+
+# Alternatively, to require TPM + Startup Key + PIN, uncomment this:
+# Set-ItemProperty -Path $regPath -Name "UseTPMKeyPIN" -Value 2 -Type DWord
+
+# Optionally, do not allow BitLocker without TPM (optional based on org requirement)
+# Set-ItemProperty -Path $regPath -Name "EnableBDEWithNoTPM" -Value 0 -Type DWord
+
+Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\FVE
