@@ -1,0 +1,37 @@
+<#
+.SYNOPSIS
+    This PowerShell script ensures that the Secondary Logon service must be disabled on Windows 10.
+
+.NOTES
+    Author          : Bakhsish Rai
+    LinkedIn        : linkedin.com/in/bakhsish-rai-233621267/
+    GitHub          : github.com/BakhsishRai
+    Date Created    : 06-27-2025
+    Last Modified   : 06-27-2025
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-00-000175
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\(STIG-ID-WN10-00-000175.).ps1 
+CODE:
+
+# Must be run as Administrator
+# 1. Set startup type to Disabled
+Set-Service -Name seclogon -StartupType Disabled
+
+# 2. Stop the service if it is currently running
+Stop-Service -Name seclogon -Force
+
+Get-Service -Name seclogon
+
+Get-WmiObject -Class Win32_Service -Filter "Name='seclogon'" | Select-Object StartMode
