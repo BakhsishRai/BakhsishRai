@@ -1,0 +1,38 @@
+<#
+.SYNOPSIS
+    This PowerShell script ensures that solicited remote assistance must not be allowed.
+
+.NOTES
+    Author          : Bakhsish Rai
+    LinkedIn        : linkedin.com/in/bakhsish-rai-233621267/
+    GitHub          : github.com/BakhsishRai
+    Date Created    : 06-28-2025
+    Last Modified   : 06-28-2025
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000155
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\(STIG-ID-WN10-CC-000155.).ps1 
+CODE:
+
+# Define the registry path
+$regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+
+# Create the key if it doesn't exist
+If (-Not (Test-Path $regPath)) {
+    New-Item -Path $regPath -Force | Out-Null
+}
+
+# Disable solicited remote assistance
+Set-ItemProperty -Path $regPath -Name "fAllowToGetHelp" -Value 0 -Type DWord
+Get-ItemProperty -Path $regPath -Name "fAllowToGetHelp"
