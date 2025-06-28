@@ -1,0 +1,30 @@
+<#
+.SYNOPSIS
+    This PowerShell script ensures that the minimum password age must be configured to at least 1 day.
+
+.NOTES
+    Author          : Bakhsish Rai
+    LinkedIn        : linkedin.com/in/bakhsish-rai-233621267/
+    GitHub          : github.com/BakhsishRai
+    Date Created    : 06-27-2025
+    Last Modified   : 06-27-2025
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-AC-000030
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\(STIG-ID-WN10-AC-000030.).ps1 
+CODE:
+
+# Set minimum password age to 1 day
+net accounts /minpwage:1
+net accounts
