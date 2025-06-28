@@ -1,0 +1,37 @@
+<#
+.SYNOPSIS
+    This PowerShell script ensures that printing over HTTP must be prevented.
+
+.NOTES
+    Author          : Bakhsish Rai
+    LinkedIn        : linkedin.com/in/bakhsish-rai-233621267/
+    GitHub          : github.com/BakhsishRai
+    Date Created    : 06-27-2025
+    Last Modified   : 06-27-2025
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000110
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\(STIG-ID-WN10-CC-000110.).ps1 
+CODE:
+
+# Create the key if it doesn't exist
+$regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+If (-Not (Test-Path $regPath)) {
+    New-Item -Path $regPath -Force | Out-Null
+}
+
+# Set DisableHTTPPrinting to 1 (disable printing over HTTP)
+Set-ItemProperty -Path $regPath -Name "DisableHTTPPrinting" -Value 1 -Type DWord
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers" `
+                 -Name "DisableHTTPPrinting"
